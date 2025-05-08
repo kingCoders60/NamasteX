@@ -44,4 +44,17 @@ model Post{
   image String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  //Relations
+  authore User @relation(fields:[authorId],references:[id],onDelete:Cascade)//Cascade delete means delete all post if parent is deleted.
+  comments Comment[]
+  likes Like[]
+  notifications Notification[]
+}
+
+model Comment{
+  id String @id @default(cuid(now()))
+  content String
+  authoreId String
+  cratedAt DateTime @default(now())
 }
