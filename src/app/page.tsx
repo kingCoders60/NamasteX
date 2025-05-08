@@ -1,6 +1,4 @@
-import React from 'react'
-
-const page = () => {
+export default async function Home(){
   return (
     <div>
       This is Home Page      
@@ -8,4 +6,3 @@ const page = () => {
   )
 }
 
-export default page
