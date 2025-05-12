@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import  {ClerkProvider}  from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/Navbar";
 import  Sidebar  from "@/components/Sidebar";
 import { Toaster } from "react-hot-toast";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,7 +30,7 @@ export default function RootLayout({
     <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
             attribute="class"
@@ -41,15 +41,14 @@ export default function RootLayout({
             <div className="min-h-screen">
               <Navbar/>
               <main className="py-8">
-                <div className="max-w-7xl mx-auto px-4">
+                <div className="max-w-10xl mx-auto px-10 flex">
                     <div className="hidden lg:block lg:col-span-3">
                     <Sidebar />
                     </div>
-                  <div>{children}
+                  <div className="flex-grow">{children}
                   </div>
                 </div>
               </main>
-              
             </div>
             <Toaster/>
           </ThemeProvider>

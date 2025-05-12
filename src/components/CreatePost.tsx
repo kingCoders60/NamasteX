@@ -39,7 +39,7 @@ function CreatePost() {
   };
 
   return (
-    <div className="flex justify-center items-center p-4 flex padding-90">
+    <div className="flex justify-center items-center p-4  padding-90">
       <Card className="min-h-[300px] p-6 flex flex-col shadow-lg max-w-[600px] w-full">
         <CardContent className="pt-4 space-y-6">
           <div className="flex items-start space-x-4">
@@ -50,7 +50,7 @@ function CreatePost() {
               placeholder="What's on your mind?"
               className="min-h-[150px] w-full resize-none border-none focus-visible:ring-0 text-base"
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) =>setContent(e.target.value)}
               disabled={isPosting}
             />
           </div>
