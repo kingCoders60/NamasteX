@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
+import { io } from "socket.io-client";
 import { Card, CardContent } from "./ui/card";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
@@ -10,6 +11,8 @@ import { Button } from "./ui/button";
 import { createPost } from "@/actions/post.action";
 import toast from "react-hot-toast";
 import ImageUpload from "./ImageUpload";
+
+const socket = io("http://localhost:3001"); // Connect to WebSocket server
 
 function CreatePost() {
   const { user } = useUser();
@@ -25,6 +28,11 @@ function CreatePost() {
     try {
       const result = await createPost(content, imageUrl);
       if (result?.success) {
+        const newPost = { id: Date.now(), content, imageUrl, user };
+        
+        // Emit real-time post event
+        socket.emit("newPost", newPost);
+
         setContent("");
         setImageUrl("");
         setShowImageUpload(false);
@@ -39,7 +47,7 @@ function CreatePost() {
   };
 
   return (
-    <div className="flex justify-center items-center p-4  padding-90">
+    <div className="flex justify-center items-center p-4 padding-90">
       <Card className="min-h-[300px] p-6 flex flex-col shadow-lg max-w-[600px] w-full">
         <CardContent className="pt-4 space-y-6">
           <div className="flex items-start space-x-4">
@@ -50,7 +58,7 @@ function CreatePost() {
               placeholder="What's on your mind?"
               className="min-h-[150px] w-full resize-none border-none focus-visible:ring-0 text-base"
               value={content}
-              onChange={(e) =>setContent(e.target.value)}
+              onChange={(e) => setContent(e.target.value)}
               disabled={isPosting}
             />
           </div>
