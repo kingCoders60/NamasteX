@@ -1,28 +1,37 @@
-import CreatePost from "@/components/CreatePost";
-import { currentUser } from "@clerk/nextjs/server";
-import WhoToFollow from "@/components/WhoToFollow";
 import { getPosts } from "@/actions/post.action";
-import  PostCard  from "@/components/PostCard";
 import { getDbUserId } from "@/actions/user.action";
+import CreatePost from "@/components/CreatePost";
+import PostCard from "@/components/PostCard";
+import WhoToFollow from "@/components/WhoToFollow";
+import { currentUser } from "@clerk/nextjs/server";
+// import NewPostPopup from "@/components/NewPostPopup";
 
-export default async function Home(){
-  
+
+export default async function Home() {
   const user = await currentUser();
-  const posts=await getPosts();
+  const posts = await getPosts();
   const dbUserId = await getDbUserId();
 
-  console.log({posts})
   return (
     <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
       <div className="lg:col-span-6">
-        {user? <CreatePost/>:null}
-        <div className="space-y-6">{
-          posts.map((post)=>(
-            <PostCard key={post.id} post={post}/>
-          ))}POST Card</div>
-      </div>
-      <div className="hidden lg:block lg:col-span-4 sticky top-20"><WhoToFollow/></div>      
-    </div>
-  )
-}
+        {user ? <CreatePost /> : null}
 
+        <div className="space-y-6">
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} dbUserId={dbUserId} />
+          ))}
+        </div>
+      </div>
+      {/* <NewPostPopup posts={posts} setPosts={() => {}} /> */}
+      <div className="hidden lg:block lg:col-span-4 sticky top-20">
+        <WhoToFollow />
+      </div>
+      <footer className="text-center p-4 text-gray-300">
+    <p>&copy; 2025 All Rights Reserved</p>
+    <a href="https://github.com/kingCoders60" className="text-blue-500 underline" target="_blank">GitHub</a>
+</footer>
+
+    </div>
+  );
+}

@@ -3,7 +3,7 @@ import React from 'react'
 const loading = () => {
   return (
     <div className="flex items-center justify-center h-64">
-      <svg className="animate-spin h-8 w-8 text-gray-500 mr-3" viewBox="0 0 24 24">
+      <svg className="animate-spin h-8 w-8 text-green-500 mr-3" viewBox="0 0 24 24">
         <circle
           className="opacity-25"
           cx="12"

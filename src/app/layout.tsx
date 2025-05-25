@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import  {ClerkProvider}  from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/Navbar";
-import  Sidebar  from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar";
 import { Toaster } from "react-hot-toast";
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,32 +18,23 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en" suppressHydrationWarning>
-      <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="min-h-screen">
-              <Navbar/>
-              <main className="py-8">
-                <div className="max-w-10xl mx-auto px-10 flex">
-                    <div className="hidden lg:block lg:col-span-3">
-                    <Sidebar />
-                    </div>
-                  <div className="flex-grow">{children}
-                  </div>
-                </div>
-              </main>
-            </div>
-            <Toaster/>
+      <html lang="en" suppressHydrationWarning>
+        <body className="min-h-screen flex flex-col">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <Navbar />
+            <main className="flex-grow grid grid-cols-1 lg:grid-cols-10 gap-6 py-8 max-w-7xl mx-auto px-4">
+              {/* Sidebar for larger screens */}
+              <div className="hidden lg:block lg:col-span-3">
+                <Sidebar />
+              </div>
+
+              {/* Main content */}
+              <div className="lg:col-span-7">{children}</div>
+            </main>
+            <Toaster />
           </ThemeProvider>
-      </body>
-    </html>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
