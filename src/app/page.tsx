@@ -28,8 +28,8 @@ export default async function Home() {
         <WhoToFollow />
       </div>
       <footer className="text-center p-4 text-gray-300">
-    <p>&copy; 2025 All Rights Reserved</p>
-    <a href="https://github.com/kingCoders60" className="text-blue-500 underline" target="_blank">GitHub</a>
+    
+    
 </footer>
 
     </div>

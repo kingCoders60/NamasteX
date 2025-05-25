@@ -33,6 +33,19 @@ export default function RootLayout({
             </main>
             <Toaster />
           </ThemeProvider>
+         
+        <footer className="w-full flex flex-col items-center justify-center mt-auto py-4">
+      <p>&copy; 2025 All Rights Reserved.</p>
+      <a
+         
+        href="https://github.com/kingCoders60"
+        className="text-blue-500 underline fixed align:right bottom-4 right-4 animate-pulse"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="/github.png" alt="GitHub Icon" width="40" height="40"/> 
+      </a>
+    </footer>
         </body>
       </html>
     </ClerkProvider>
