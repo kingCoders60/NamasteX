@@ -65,10 +65,14 @@ function ProfilePageClient({
       formData.append(key, value);
     });
 
+    // Note: Assuming updateProfile handles validation and data correctly.
     const result = await updateProfile(formData);
     if (result.success) {
       setShowEditDialog(false);
       toast.success("Profile updated successfully");
+      // Optional: Add a mechanism to refresh profile data here if needed.
+    } else {
+      toast.error("Failed to update profile");
     }
   };
 
@@ -79,6 +83,8 @@ function ProfilePageClient({
       setIsUpdatingFollow(true);
       await toggleFollow(user.id);
       setIsFollowing(!isFollowing);
+      // Optional: Since user._count.followers is used, you might need a
+      // mechanism to refresh the parent page's data to see the count update.
     } catch (error) {
       toast.error("Failed to update follow status");
     } finally {
@@ -86,10 +92,13 @@ function ProfilePageClient({
     }
   };
 
-  const isOwnProfile =
-    currentUser?.username === user.username ||
-    currentUser?.emailAddresses[0].emailAddress.split("@")[0] === user.username;
+  // ✅ CORRECTED LOGIC: Check profile ownership by comparing unique Clerk IDs (best practice).
+  const isOwnProfile = currentUser?.id === user.id;
 
+  // The original check for reference (removed from the final code but noted here):
+  // const isOwnProfile = currentUser?.username === user.username ||
+  //   currentUser?.emailAddresses[0].emailAddress.split("@")[0] === user.username;
+  
   const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
 
   return (
@@ -100,6 +109,7 @@ function ProfilePageClient({
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="w-24 h-24">
+                  {/* Note: Assuming user.image is the correct field for the image URL */}
                   <AvatarImage src={user.image ?? "/avatar.png"} />
                 </Avatar>
                 <h1 className="mt-4 text-2xl font-bold">{user.name ?? user.username}</h1>
@@ -113,12 +123,18 @@ function ProfilePageClient({
                       <div className="font-semibold">{user._count.following.toLocaleString()}</div>
                       <div className="text-sm text-muted-foreground">Following</div>
                     </div>
-                    <Separator orientation="vertical" />
+                    {/* The Separator component is used here */}
+                    <div className="mx-4 h-full">
+                       <Separator orientation="vertical" />
+                    </div>
                     <div>
                       <div className="font-semibold">{user._count.followers.toLocaleString()}</div>
                       <div className="text-sm text-muted-foreground">Followers</div>
                     </div>
-                    <Separator orientation="vertical" />
+                    {/* The Separator component is used here */}
+                    <div className="mx-4 h-full">
+                       <Separator orientation="vertical" />
+                    </div>
                     <div>
                       <div className="font-semibold">{user._count.posts.toLocaleString()}</div>
                       <div className="text-sm text-muted-foreground">Posts</div>
@@ -185,7 +201,7 @@ function ProfilePageClient({
             <TabsTrigger
               value="posts"
               className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-               data-[state=active]:bg-transparent px-6 font-semibold"
+                data-[state=active]:bg-transparent px-6 font-semibold"
             >
               <FileTextIcon className="size-4" />
               Posts
@@ -193,7 +209,7 @@ function ProfilePageClient({
             <TabsTrigger
               value="likes"
               className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-               data-[state=active]:bg-transparent px-6 font-semibold"
+                data-[state=active]:bg-transparent px-6 font-semibold"
             >
               <HeartIcon className="size-4" />
               Likes
@@ -221,6 +237,7 @@ function ProfilePageClient({
           </TabsContent>
         </Tabs>
 
+        {/* Edit Profile Dialog */}
         <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
