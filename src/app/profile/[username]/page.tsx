@@ -101,7 +101,7 @@ async function Page({ params }: PageProps) {
 export default Page;*/
 // src/app/profile/[username]/page.tsx
 
-import {
+/*import {
   getProfileByUsername,
   getUserLikedPosts,
   getUserPosts,
@@ -153,4 +153,51 @@ export async function generateMetadata({ params }: { params: ProfileParams }) {
 }
 
 // 4. Export the component (already done, but confirming name is 'Page')
-export default Page;
+export default Page;*/
+
+//update 4
+import {
+  getProfileByUsername,
+  getUserLikedPosts,
+  getUserPosts,
+  isFollowing,
+} from "@/actions/profile.action";
+import { notFound } from "next/navigation";
+import ProfilePageClient from "./ProfilePageClient";
+
+// Fix: type params as a Promise
+type ProfileParams = Promise<{ username: string }>;
+
+export default async function Page({ params }: { params: ProfileParams }) {
+  const { username } = await params; // Await the Promise
+
+  const user = await getProfileByUsername(username).catch(() => null);
+  if (!user) return notFound();
+
+  const [posts, likedPosts, isCurrentUserFollowing] = await Promise.all([
+    getUserPosts(user.id).catch(() => []),
+    getUserLikedPosts(user.id).catch(() => []),
+    isFollowing(user.id).catch(() => false),
+  ]);
+
+  return (
+    <ProfilePageClient
+      user={user}
+      posts={posts}
+      likedPosts={likedPosts}
+      isFollowing={isCurrentUserFollowing}
+    />
+  );
+}
+
+// Metadata function also needs async params
+export async function generateMetadata({ params }: { params: ProfileParams }) {
+  const { username } = await params;
+  const user = await getProfileByUsername(username).catch(() => null);
+  if (!user) return;
+
+  return {
+    title: user.name ?? user.username,
+    description: user.bio || `Check out ${user.username}'s profile.`,
+  };
+}
