@@ -233,6 +233,8 @@
 
 
 
+
+
 "use client";
 
 import { createComment, deletePost, getPosts, toggleLike } from "@/actions/post.action";
@@ -243,7 +245,7 @@ import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-// import { DeleteAlertDialog } from "./DeleteAlertDialog";
+import { DeleteAlertDialog } from "./DeleteAlertDialog";
 import { Button } from "./ui/button";
 import { HeartIcon, LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react";
 import { Textarea } from "./ui/textarea";
@@ -297,8 +299,11 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
     try {
       setIsDeleting(true);
       const result = await deletePost(post.id);
-      if (result.success) toast.success("Post deleted successfully");
-      else throw new Error(result.error);
+      if (result?.success) {
+        toast.success("Post deleted successfully");
+      } else {
+        throw new Error(result?.error ?? "Unknown error");
+      }
     } catch (error) {
       toast.error("Failed to delete post");
     } finally {
@@ -317,14 +322,10 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
               </Avatar>
             </Link>
 
-            {/* POST HEADER & TEXT CONTENT */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
-                  <Link
-                    href={`/profile/${post.author.username}`}
-                    className="font-semibold truncate"
-                  >
+                  <Link href={`/profile/${post.author.username}`} className="font-semibold truncate">
                     {post.author.name}
                   </Link>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
@@ -333,31 +334,26 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                     <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
                   </div>
                 </div>
-                {/* Check if current user is the post author */}
-                {/* { {dbUserId === post.author.id && (
+                {dbUserId === post.author.id && (
                   <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDeletePost} />
-                )} } */}
+                )}
               </div>
               <p className="mt-2 text-sm text-foreground break-words">{post.content}</p>
             </div>
           </div>
 
-          {/* POST IMAGE */}
           {post.image && (
             <div className="rounded-lg overflow-hidden">
               <img src={post.image} alt="Post content" className="w-full h-auto object-cover" />
             </div>
           )}
 
-          {/* LIKE & COMMENT BUTTONS */}
           <div className="flex items-center pt-2 space-x-4">
             {user ? (
               <Button
                 variant="ghost"
                 size="sm"
-                className={`text-muted-foreground gap-2 ${
-                  hasLiked ? "text-red-500 hover:text-red-600" : "hover:text-red-500"
-                }`}
+                className={`text-muted-foreground gap-2 ${hasLiked ? "text-red-500 hover:text-red-600" : "hover:text-red-500"}`}
                 onClick={handleLike}
               >
                 {hasLiked ? (
@@ -382,18 +378,14 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
               className="text-muted-foreground gap-2 hover:text-blue-500"
               onClick={() => setShowComments((prev) => !prev)}
             >
-              <MessageCircleIcon
-                className={`size-5 ${showComments ? "fill-blue-500 text-blue-500" : ""}`}
-              />
+              <MessageCircleIcon className={`size-5 ${showComments ? "fill-blue-500 text-blue-500" : ""}`} />
               <span>{post.comments.length}</span>
             </Button>
           </div>
 
-          {/* COMMENTS SECTION */}
           {showComments && (
             <div className="space-y-4 pt-4 border-t">
               <div className="space-y-4">
-                {/* DISPLAY COMMENTS */}
                 {post.comments.map((comment) => (
                   <div key={comment.id} className="flex space-x-3">
                     <Avatar className="size-8 flex-shrink-0">
@@ -402,13 +394,9 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <span className="font-medium text-sm">{comment.author.name}</span>
-                        <span className="text-sm text-muted-foreground">
-                          @{comment.author.username}
-                        </span>
+                        <span className="text-sm text-muted-foreground">@{comment.author.username}</span>
                         <span className="text-sm text-muted-foreground">·</span>
-                        <span className="text-sm text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.createdAt))} ago
-                        </span>
+                        <span className="text-sm text-muted-foreground">{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
                       </div>
                       <p className="text-sm break-words">{comment.content}</p>
                     </div>
@@ -429,20 +417,11 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                       className="min-h-[80px] resize-none"
                     />
                     <div className="flex justify-end mt-2">
-                      <Button
-                        size="sm"
-                        onClick={handleAddComment}
-                        className="flex items-center gap-2"
-                        disabled={!newComment.trim() || isCommenting}
-                      >
-                        {isCommenting ? (
-                          "Posting..."
-                        ) : (
-                          <>
-                            <SendIcon className="size-4" />
-                            Comment
-                          </>
-                        )}
+                      <Button size="sm" onClick={handleAddComment} className="flex items-center gap-2" disabled={!newComment.trim() || isCommenting}>
+                        {isCommenting ? "Posting..." : <>
+                          <SendIcon className="size-4" />
+                          Comment
+                        </>}
                       </Button>
                     </div>
                   </div>
@@ -464,4 +443,5 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
     </Card>
   );
 }
+
 export default PostCard;
