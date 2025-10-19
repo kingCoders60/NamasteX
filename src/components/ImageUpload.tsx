@@ -36,9 +36,7 @@ function ImageUpload({ endpoint, onChange, value }: ImageUploadProps) {
         toast.error(error.message)
       }}
       className="flex items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-md"
-    >
-      <span className="text-green-500 border-8">Upload an image</span>
-    </UploadDropzone>
+    />
   );
 }
 export default ImageUpload;
