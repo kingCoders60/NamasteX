@@ -7,6 +7,9 @@ import PostCard from "@/components/PostCard";
 import WhoToFollow from "@/components/WhoToFollow";
 import { currentUser } from "@clerk/nextjs/server";
 
+// Tell Next.js this page should always be dynamically rendered
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   try {
     const user = await currentUser();
@@ -19,7 +22,7 @@ export default async function Home() {
           {user && <CreatePost />}
 
           <div className="space-y-6">
-            {posts.map((post) => (
+            {posts.map((post: any) => (
               <PostCard key={post.id} post={post} dbUserId={dbUserId} />
             ))}
           </div>

@@ -1,39 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getPosts } from "@/actions/post.action";
-import CreatePost from "@/components/CreatePost";
-import PostCard from "@/components/PostCard";
-import WhoToFollow from "@/components/WhoToFollow";
-import NewPostPopup from "@/components/NewPostPopup";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Button } from "./ui/button";
+import CreatePost from "./CreatePost";
 
-export default function Home() {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const newPosts = await getPosts();
-      setPosts(newPosts);
-    };
-
-    fetchPosts();
-  }, []);
+export default function NewPostPopup() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-      <div className="lg:col-span-6">
-        <NewPostPopup posts={posts} setPosts={setPosts} /> {/* ✅ Now works correctly */}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="w-full mb-4">
+          Create New Post
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Create a new post</DialogTitle>
+        </DialogHeader>
         <CreatePost />
-        <div className="space-y-6">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      </div>
-
-      <div className="hidden lg:block lg:col-span-4 sticky top-20">
-        <WhoToFollow />
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
