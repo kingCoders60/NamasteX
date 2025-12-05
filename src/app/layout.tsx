@@ -38,8 +38,8 @@ export default function RootLayout({
       <p>&copy; 2025 All Rights Reserved.</p>
       <a
          
-        href="https://github.com/kingCoders60"
-        className="text-blue-500 underline fixed align:right bottom-4 right-4 animate-pulse"
+        href="https://github.com/shivampatra2027"
+        className="text-blue-500 underline fixed align:right bottom-4 right-4"
         target="_blank"
         rel="noopener noreferrer"
       >

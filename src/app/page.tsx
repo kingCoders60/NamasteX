@@ -1,5 +1,3 @@
-// src/app/page.tsx
-
 import { getPosts } from "@/actions/post.action";
 import { getDbUserId } from "@/actions/user.action";
 import CreatePost from "@/components/CreatePost";
@@ -32,9 +30,9 @@ export default async function Home() {
           <WhoToFollow />
         </div>
 
-        <footer className="text-center p-4 text-gray-300">
+        {/* <footer className="text-center p-4 text-gray-300">
           © {new Date().getFullYear()} Shivam's Feed. All rights reserved.
-        </footer>
+        </footer> */}
       </div>
     );
   } catch (error) {

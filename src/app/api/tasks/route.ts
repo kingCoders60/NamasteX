@@ -1,3 +1,5 @@
+import { fail } from "assert";
+
 interface Task{
     id:number;
     title:string;
@@ -22,6 +24,6 @@ export async function POST(request:Request){
             return Response.json({error:"Title is required"},{status:400});
         }
     }catch(error){
-
+        return Response.json({error:"Internal server error", status:fail});
     }
 }
